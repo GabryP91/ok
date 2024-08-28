@@ -17,7 +17,7 @@ class DayTableSeeder extends Seeder
      */
     public function run()
     {
-        Day :: factory() -> count(1) -> make() -> each(function($day) {
+        Day :: factory() -> count(5) -> make() -> each(function($day) {
 
             $imageUrl = "https://picsum.photos/640/400";
             // Scarica l'immagine dall'URL

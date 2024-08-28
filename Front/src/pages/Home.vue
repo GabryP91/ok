@@ -50,11 +50,21 @@ export default {
     <h1>Il mio primo viaggio</h1>
     <div class="row row-cols-5">
       <div v-for="(day, i) in store.DayList" :key="i" class="col p-2">
-        {{ day.titolo }}
+        <h2>{{ day.titolo }}</h2>
         <img :src="getImageUrl(day)" alt="immagine" />
+        <p>{{ day.data }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+//Scss relativo alla sola sezione di header
+@use "../styles/partials/variables" as *;
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  //color: $secondary;
+}
+</style>

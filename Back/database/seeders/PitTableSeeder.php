@@ -16,7 +16,7 @@ class PitTableSeeder extends Seeder
      */
     public function run()
     {
-        Pit :: factory() -> count(1) -> make() -> each(function($pit) {
+        Pit :: factory() -> count(3) -> make() -> each(function($pit) {
             $day = Day :: inRandomOrder() -> first();
             $pit -> save();
             $pit -> days() -> attach($day);
