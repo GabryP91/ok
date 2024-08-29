@@ -2,11 +2,11 @@
 import axios from "axios";
 
 //importo store
-import { store } from "./../store";
+import { store } from "../store";
 
 export default {
   components: {
-    name: "Home",
+    name: "Show",
   },
 
   data() {
@@ -57,26 +57,7 @@ export default {
 };
 </script>
 
-<template>
-  <div class="container">
-    <h1>Il mio primo viaggio</h1>
-
-    <div class="row row-cols-5">
-      <div v-for="(day, i) in store.DayList" :key="i" class="col p-2">
-        <RouterLink
-          tag="div"
-          :to="{ name: 'show', params: { id: day.id } }"
-          @click="riempiVet(day.id), (store.view = 2)"
-          class="text-decoration-none"
-        >
-          <h2>{{ day.titolo }}</h2>
-          <img :src="getImageUrl(day)" alt="immagine" />
-          <p>{{ day.data }}</p>
-        </RouterLink>
-      </div>
-    </div>
-  </div>
-</template>
+<template>ciao sono la show</template>
 
 <style lang="scss">
 //Scss relativo alla sola sezione di header
