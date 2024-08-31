@@ -23,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => '/v1'], function(){
 
     Route :: get('voyager', [ ApiController :: class, 'getVoys']);
+    Route :: get('tips_voyager', [ ApiController :: class, 'getPits_Voys']);
 
 });
