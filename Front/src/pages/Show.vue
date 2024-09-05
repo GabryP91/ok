@@ -13,6 +13,8 @@ export default {
       showPits: false,
       isModalOpen: false, // Stato per gestire l'apertura/chiusura della modale
       selectedPit: null, // Stato per memorizzare la tappa selezionata
+
+      selectedPitNote: "",
     };
   },
 
@@ -48,10 +50,12 @@ export default {
       });
     },
 
+    //ritorno alla home page
     goToHome() {
       this.$router.push("/");
     },
 
+    //aperture-chiusura Modale
     openModal(pit) {
       this.selectedPit = pit; // Memorizza la tappa selezionata
       this.isModalOpen = true; // Mostra la modale
@@ -60,6 +64,27 @@ export default {
     closeModal() {
       this.isModalOpen = false; // Chiude la modale
       this.selectedPit = null; // Resetta la tappa selezionata
+    },
+
+    savePitNote() {
+      if (this.selectedPit) {
+        const updatedPit = { ...this.selectedPit, Note: this.selectedPitNote };
+
+        let myURL2 = store.apiURL2 + this.selectedPit.id;
+        console.log(myURL2);
+        axios
+          .put(myURL2, updatedPit)
+          .then((response) => {
+            // Aggiorna la nota nel frontend
+            this.selectedPit.Note = this.selectedPitNote;
+
+            // Eventuali azioni da eseguire dopo l'aggiornamento
+            this.closeModal();
+          })
+          .catch((error) => {
+            console.error("Errore durante l'aggiornamento della nota:", error);
+          });
+      }
     },
   },
 
@@ -108,8 +133,12 @@ export default {
     <div class="modal-content">
       <span @click="closeModal" class="close">&times;</span>
       <h2>Note:</h2>
-      <p>{{ selectedPit?.Note }}</p>
       <!-- Visualizza le note della tappa selezionata -->
+      <p>{{ selectedPit?.Note }}</p>
+      <!-- Text area per la modifica -->
+      <textarea v-model="selectedPitNote" rows="4" cols="50"></textarea>
+      <!-- Bottone per salvare le modifiche -->
+      <button @click="savePitNote" class="btn btn-primary mt-3">Salva</button>
     </div>
   </div>
 </template>

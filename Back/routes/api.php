@@ -24,5 +24,5 @@ Route::group(['prefix' => '/v1'], function(){
 
     Route :: get('voyager', [ ApiController :: class, 'getVoys']);
     Route :: get('tips_voyager', [ ApiController :: class, 'getPits_Voys']);
-
+    Route :: put('pits_mod_note', [ ApiController :: class, 'Modify_note_pit']);
 });

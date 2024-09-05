@@ -35,4 +35,16 @@ class ApiController extends Controller
             'messages' => $Pits
         ]);
     }
+
+    public function Modify_note_pit(Request $request)
+    {
+        $pit_id = $request->input('pit_id');
+
+        $pit = Pit::findOrFail($pit_id);
+        $pit->Note = $request->input('Note');
+        $pit->save();
+    
+        return response()->json(['message' => 'Note aggiornate con successo']);
+    }
+
 }
