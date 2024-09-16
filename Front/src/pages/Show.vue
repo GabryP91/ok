@@ -12,7 +12,9 @@ export default {
       store,
       showPits: false,
       isModalOpen: false, // Stato per gestire l'apertura/chiusura della modale
+      isModalOpen1: false, // Stato per gestire l'apertura/chiusura della modale
       selectedPit: null, // Stato per memorizzare la tappa selezionata
+      selectedVote: null, // Stato per memorizzare la votazione
 
       selectedPitNote: "",
     };
@@ -55,35 +57,74 @@ export default {
       this.$router.push("/");
     },
 
-    //aperture-chiusura Modale
-    openModal(pit) {
-      this.selectedPit = pit; // Memorizza la tappa selezionata
-      this.isModalOpen = true; // Mostra la modale
+    openModal(data, value) {
+      console.log(data);
+      switch (data) {
+        case "pit":
+          this.selectedPit = value; // Memorizza la tappa selezionata
+          this.isModalOpen = true; // Mostra la modale
+          break;
+        case "vote":
+          this.selectedVote = value; // Memorizza la votazione
+          this.isModalOpen1 = true; // Mostra la seconda modale
+          break;
+        default:
+          console.error("Tipo di modale sconosciuto:", data);
+      }
     },
 
-    closeModal() {
-      this.isModalOpen = false; // Chiude la modale
-      this.selectedPit = null; // Resetta la tappa selezionata
+    closeModal(data) {
+      switch (data) {
+        case "pit":
+          this.isModalOpen = false; // Chiude la modale
+          this.selectedPit = null; // Resetta la tappa selezionata
+          break;
+        case "vote":
+          this.isModalOpen1 = false; // Chiude la seconda modale
+          this.selectedVote = null; // Resetta la votazione selezionata
+          break;
+        default:
+          console.error("Tipo di modale sconosciuto:", data);
+      }
+    },
+
+    getStars(num) {
+      const numStellePiene = Math.ceil(num / 2);
+      const numStelleVuote = 5 - numStellePiene;
+
+      const stellePiene = "★".repeat(numStellePiene);
+      const stelleVuote = "☆".repeat(numStelleVuote);
+
+      return stellePiene + stelleVuote;
     },
 
     savePitNote() {
       if (this.selectedPit) {
-        const updatedPit = { ...this.selectedPit, Note: this.selectedPitNote };
+        //controllo se ho modificato le note
+        if (this.selectedPitNote) {
+          const updatedPit = {
+            ...this.selectedPit,
+            Note: this.selectedPitNote,
+          };
 
-        let myURL2 = store.apiURL2 + this.selectedPit.id;
-        console.log(myURL2);
-        axios
-          .put(myURL2, updatedPit)
-          .then((response) => {
-            // Aggiorna la nota nel frontend
-            this.selectedPit.Note = this.selectedPitNote;
+          let myURL2 = store.apiURL2 + this.selectedPit.id;
+          console.log(myURL2);
+          axios
+            .put(myURL2, updatedPit)
+            .then((response) => {
+              // Aggiorna la nota nel frontend
+              this.selectedPit.Note = this.selectedPitNote;
 
-            // Eventuali azioni da eseguire dopo l'aggiornamento
-            this.closeModal();
-          })
-          .catch((error) => {
-            console.error("Errore durante l'aggiornamento della nota:", error);
-          });
+              // Eventuali azioni da eseguire dopo l'aggiornamento
+              this.closeModal();
+            })
+            .catch((error) => {
+              console.error(
+                "Errore durante l'aggiornamento della nota:",
+                error
+              );
+            });
+        }
       }
     },
   },
@@ -114,30 +155,47 @@ export default {
           <p>{{ pit.Note }}</p>
 
           <!-- Bottone per aprire la modale per la modifica -->
-          <button @click="openModal(pit)" class="btn btn-secondary mt-2">
+          <button @click="openModal('pit', pit)" class="btn btn-secondary mt-2">
             Modifica
+          </button>
+
+          <!-- Bottone per aprire la modale per la modifica -->
+          <button @click="openModal('vote', vote)" class="btn btn-primary mt-2">
+            Aggiungi votazione
           </button>
         </div>
       </div>
-      <button @click="goToHome" class="btn btn-primary mt-3">
-        Torna indietro
-      </button>
+      <div class="text-center">
+        <button @click="goToHome" class="btn btn-primary mt-3">
+          Torna indietro
+        </button>
+      </div>
     </div>
     <div v-else class="row row-cols-5">
-      <h2 style="text-align: center">Caricamento.....</h2>
+      <h2>Caricamento.....</h2>
     </div>
   </div>
 
-  <!-- La modale -->
+  <!-- La modale NOTE -->
   <div v-if="isModalOpen" id="myModal" class="modal">
     <div class="modal-content">
-      <span @click="closeModal" class="close">&times;</span>
+      <span @click="closeModal('pit')" class="close">&times;</span>
       <h2>Note:</h2>
       <!-- Visualizza le note della tappa selezionata -->
-      <p>{{ selectedPit?.Note }}</p>
+      <p>{{ selectedPit.Note }}</p>
       <!-- Text area per la modifica -->
       <textarea v-model="selectedPitNote" rows="4" cols="50"></textarea>
       <!-- Bottone per salvare le modifiche -->
+      <button @click="savePitNote" class="btn btn-primary mt-3">Salva</button>
+    </div>
+  </div>
+
+  <div v-if="isModalOpen1" id="myModal1" class="modal">
+    <div class="modal-content">
+      <span @click="closeModal('vote')" class="close">&times;</span>
+      <h2>Dai un voto:</h2>
+      <!-- assegna una votazaione -->
+
       <button @click="savePitNote" class="btn btn-primary mt-3">Salva</button>
     </div>
   </div>
@@ -145,13 +203,6 @@ export default {
 
 <style lang="scss">
 @use "../styles/partials/variables" as *;
-
-h1,
-h2,
-h3 {
-  text-align: center;
-  margin-top: 20px;
-}
 
 /* Stile della modale */
 .modal {
