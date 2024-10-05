@@ -4,9 +4,11 @@ import axios from "axios";
 //importo store
 import { store } from "./../store";
 
+import Sliderimg from "../components/Sliderimg.vue";
+
 export default {
   components: {
-    name: "Home",
+    Sliderimg,
   },
 
   data() {
@@ -59,6 +61,7 @@ export default {
 
 <template>
   <div class="container">
+    <Sliderimg />
     <h1>Il mio primo viaggio</h1>
 
     <div class="row row-cols-5">

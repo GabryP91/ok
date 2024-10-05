@@ -14,7 +14,9 @@ export default {
       isModalOpen: false, // Stato per gestire l'apertura/chiusura della modale
       isModalOpen1: false, // Stato per gestire l'apertura/chiusura della modale
       selectedPit: null, // Stato per memorizzare la tappa selezionata
+
       selectedVote: null, // Stato per memorizzare la votazione
+      hoverRating: 0, // Valore del rating al passaggio del mouse
 
       selectedPitNote: "",
     };
@@ -58,7 +60,6 @@ export default {
     },
 
     openModal(data, value) {
-      console.log(data);
       switch (data) {
         case "pit":
           this.selectedPit = value; // Memorizza la tappa selezionata
@@ -88,14 +89,42 @@ export default {
       }
     },
 
-    getStars(num) {
-      const numStellePiene = Math.ceil(num / 2);
-      const numStelleVuote = 5 - numStellePiene;
+    // Metodo per ottenere stelle cliccabili
+    getStars(maxStars) {
+      const stars = [];
+      for (let i = 1; i <= maxStars; i++) {
+        stars.push(i);
+      }
+      return stars;
+    },
 
-      const stellePiene = "★".repeat(numStellePiene);
-      const stelleVuote = "☆".repeat(numStelleVuote);
+    // Metodo per sapere se una stella è attiva (riempita) o no
+    isStarActive(star) {
+      return star <= this.selectedVote; // Verifica se la stella è inferiore o uguale al voto selezionato
+    },
 
-      return stellePiene + stelleVuote;
+    setRating(value) {
+      this.selectedVote = value; // Imposta il rating al clic
+    },
+
+    hoverMouse(value) {
+      this.hoverRating = value; // Mostra rating al passaggio del mouse
+    },
+
+    resetRating() {
+      this.hoverRating = 0; // Resetta il rating al passaggio del mouse
+    },
+
+    // Esempio di salvataggio della votazione
+    saveVote() {
+      console.log("Voto salvato:", this.selectedVote);
+      this.closeModal("vote");
+    },
+
+    // Metodo per sapere se una stella è attiva (riempita) o no
+    isStarActive(star) {
+      console.log(star);
+      return star <= this.selectedVote;
     },
 
     savePitNote() {
@@ -194,9 +223,19 @@ export default {
     <div class="modal-content">
       <span @click="closeModal('vote')" class="close">&times;</span>
       <h2>Dai un voto:</h2>
-      <!-- assegna una votazaione -->
+      <!-- Stelle cliccabili -->
+      <div class="stars" @mouseleave="resetRating">
+        <span
+          v-for="star in getStars(5)"
+          :key="star"
+          @mouseover="hoverMouse(star)"
+          @click="setRating(star)"
+          :class="{ active: isStarActive(star), hover: hoverRating >= star }"
+        >
+        </span>
+      </div>
 
-      <button @click="savePitNote" class="btn btn-primary mt-3">Salva</button>
+      <button @click="saveVote" class="btn btn-primary mt-3">Salva</button>
     </div>
   </div>
 </template>
@@ -222,7 +261,7 @@ export default {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 40%;
 }
 
 /* Pulsante di chiusura */
@@ -238,5 +277,33 @@ export default {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* Stile per le stelle */
+.stars {
+  display: inline-block;
+  font-size: 2rem;
+  color: #ccc; /* Colore stelle vuote */
+  cursor: pointer;
+  text-align: center;
+  //direction: rtl; /* Cambia direzione per visualizzare correttamente le stelle */
+}
+/* Stelle vuote iniziali */
+.stars span::before {
+  content: "☆"; /* Stelle vuote */
+  color: gray;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Stelle piene al passaggio del mouse */
+.stars span.hover::before {
+  content: "★"; /* Stelle piene */
+  color: gold;
+}
+
+/* Quando una stella è selezionata (attiva) */
+.stars span.active::before {
+  content: "★"; /* Stelle piene */
+  color: gold;
 }
 </style>
