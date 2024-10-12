@@ -5,20 +5,19 @@ export default {
       currentSlide: 0,
       slides: [
         {
-          image: "/images/immagine1.jpg",
-          title: "Esplora la meraviglia del mondo",
-          description: "Scopri le bellezze di questa affascinante città.",
+          image: "/images/immagine1a.jpg",
+          title: "Tracking ed Esplorazione",
+          description: "Viaggio nella natura selvaggia.",
         },
         {
-          image: "https://example.com/destination2.jpg",
-          title: "Avventure senza limiti",
-          description: "Lasciati trasportare in un viaggio avventuroso.",
+          image: "/images/immagine7.jpg",
+          title: "City Tour",
+          description: "Relax tra le capitali del mondo.",
         },
         {
-          image: "https://example.com/destination3.jpg",
-          title: "Relax in paradiso",
-          description:
-            "Rilassati e goditi il sole in queste spiagge paradisiache.",
+          image: "/images/immagine3.jpg",
+          title: "Desert explorer",
+          description:"Avventura tra le dune.",
         },
       ],
     };
@@ -84,22 +83,19 @@ body,
   font-family: "Arial", sans-serif;
 }
 
-/* Stile del contenitore dello slider */
-.slider {
-  width: 100%;
-}
 
 /* Stile delle slide */
 .slide {
   height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
   background-repeat: no-repeat;
-  background-size: auto;
+  background-size: cover;
   transition: opacity 1s ease-in-out;
 }
 
 /* Sovrapposizione scura per il testo */
 .overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -116,9 +112,7 @@ body,
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.content h1 {
-  font-size: 3rem;
-}
+
 
 .content p {
   font-size: 1.5rem;

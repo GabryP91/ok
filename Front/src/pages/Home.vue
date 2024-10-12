@@ -6,9 +6,12 @@ import { store } from "./../store";
 
 import Sliderimg from "../components/Sliderimg.vue";
 
+import Map from "../components/Map.vue";
+
 export default {
   components: {
     Sliderimg,
+    Map,
   },
 
   data() {
@@ -60,8 +63,9 @@ export default {
 </script>
 
 <template>
+  <Sliderimg />
   <div class="container">
-    <Sliderimg />
+    
     <h1>Il mio primo viaggio</h1>
 
     <div class="row row-cols-5">
@@ -79,6 +83,7 @@ export default {
       </div>
     </div>
   </div>
+  <Map />
 </template>
 
 <style lang="scss">
