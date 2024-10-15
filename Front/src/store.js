@@ -10,4 +10,9 @@ export const store = reactive({
   //terza chiamata
   apiURL2: "http://localhost:8000/api/v1/pits_mod_note?pit_id=",
 
+  //chiamata mappa
+  map: null,
+  KeyApp : "dB9lQpqT9okIueN0UQiGjXVqjGI1AGmL",
+  callMap: "https://api.tomtom.com/search/2/geocode/",
+
 });
