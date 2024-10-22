@@ -12,6 +12,7 @@ export default {
     return {
       searchQuery: '',
       store,
+      markerMode: false, // Stato per attivare/disattivare la modalità markers
     };
   },
 
@@ -45,10 +46,27 @@ export default {
         marker.setPopup(popup).togglePopup(); 
         
         store.map = mapInPage;
+        console.log(store.map)
+
+        // Aggiungi un evento click alla mappa per aggiungere markers
+      mapInPage.on('click', (e) => {
+        if (this.markerMode) {
+          
+          var Cord = [e.lngLat.lat,e.lngLat.lng]
+          console.log(Cord)
+          
+        }
+      });
 
     },
+    
+    
 
-
+    toggleMarkerMode() {
+      this.markerMode = !this.markerMode; // Attiva/disattiva la modalità markers
+      
+    },
+  
 
     searchLocation() {
       
@@ -79,20 +97,70 @@ export default {
 </script>
 
 <template>
-  <input
+  <div class="input-container">
+    <input
+      class="input-field"
       type="text"
       v-model="searchQuery"
       @keyup.enter="searchLocation"
       placeholder="Cerca una località"
     />
- <div ref="mapInPage" class="map-container"></div>
+  </div>
+  <div ref="mapInPage" class="map-container">
+    <div class="addMarker">
+      <button @click="toggleMarkerMode"> Aggiungi un segnaposto</button>
+      <i ref="flagIcon" :class="['fa-solid', 'fa-flag', 'band', { 'active': markerMode }]" ></i></div>
+    </div>
+    
 </template>
 
 <style scoped>
+.input-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Spazio sotto l'input */
+}
+
+.input-field {
+  width: 50%; /* Regola la larghezza come necessario */
+  padding: 10px; /* Aggiungi un po' di padding */
+  border: 1px solid #ccc; /* Bordo chiaro */
+  border-radius: 5px; /* Angoli arrotondati */
+  font-size: 16px; /* Aumenta la dimensione del font */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+  transition: border-color 0.3s; /* Transizione per effetto focus */
+}
+
+.input-field:focus {
+  outline: none; /* Rimuovi il contorno predefinito */
+  border-color: #007bff; /* Cambia colore del bordo al focus */
+}
+
 .map-container {
   position: relative;
   left: 25%;
   width: 50%;
   height: 500px; /* Altezza della mappa */
+  margin-bottom: 10px;
 }
+
+.addMarker {
+  position: absolute;
+  top: 20px; 
+  right: 20px; 
+  font-size: 24px; 
+  z-index: 10;
+}
+
+.band {
+  
+  color: black;
+  
+  transition: color 0.3s;
+}
+
+.band.active {
+  color: yellow; /* Colore quando attiva */
+}
+
 </style>
