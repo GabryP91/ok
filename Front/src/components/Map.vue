@@ -52,8 +52,8 @@ export default {
       mapInPage.on('click', (e) => {
         if (this.markerMode) {
           
-          var Cord = [e.lngLat.lat,e.lngLat.lng]
-          console.log(Cord)
+          const coordinates = [e.lngLat.lng, e.lngLat.lat]; // acquisisco longitudine e latitudine
+          this.addMarker(coordinates, "Nuovo marker", mapInPage);
           
         }
       });
@@ -66,6 +66,22 @@ export default {
       this.markerMode = !this.markerMode; // Attiva/disattiva la modalità markers
       
     },
+
+    addMarker(coordinates, title, map) {
+    const marker = new tt.Marker().setLngLat(coordinates).addTo(map);
+    
+    const popupOffsets = {
+      top: [0, 0],
+      bottom: [0, -70],
+      'bottom-right': [0, -70],
+      'bottom-left': [0, -70],
+      left: [25, -35],
+      right: [-25, -35]
+    };
+    const popup = new tt.Popup({offset: popupOffsets}).setHTML(`<b>${title}</b>`);
+    
+    marker.setPopup(popup).togglePopup();
+  },
   
 
     searchLocation() {
