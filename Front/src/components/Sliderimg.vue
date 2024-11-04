@@ -27,8 +27,7 @@ export default {
       this.currentSlide = (this.currentSlide + 1) % this.slides.length;
     },
     prevSlide() {
-      this.currentSlide =
-        (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+      this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
     },
     goToSlide(index) {
       this.currentSlide = index;
@@ -37,7 +36,7 @@ export default {
   mounted() {
     setInterval(() => {
       this.nextSlide();
-    }, 50000); // Cambia slide ogni 5 secondi
+    }, 5000); // Slide change every 5 seconds
   },
 };
 </script>
@@ -51,7 +50,6 @@ export default {
       :style="{ backgroundImage: `url(${slide.image})` }"
       v-show="currentSlide === index"
     >
-      <div class="overlay"></div>
       <div class="content">
         <h1>{{ slide.title }}</h1>
         <p>{{ slide.description }}</p>
@@ -59,11 +57,11 @@ export default {
       </div>
     </div>
 
-    <!-- Navigazione -->
+    <!-- Navigation -->
     <button class="prev" @click="prevSlide">❮</button>
     <button class="next" @click="nextSlide">❯</button>
 
-    <!-- Indicatori -->
+    <!-- Indicators -->
     <div class="indicators">
       <span
         v-for="(slide, index) in slides"
@@ -79,43 +77,49 @@ export default {
 html,
 body,
 #app {
-  height: 100%;
   font-family: "Arial", sans-serif;
 }
 
+/* Slider adjustments for partial height */
+.slider {
+  position: relative;
+  height: 60vh; /* Reduce height to fit similar layout */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-/* Stile delle slide */
+/* Slide style */
 .slide {
-  height: 100vh;
+  width: 80%; /* Adjust width for a more compact look */
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* Move content to the bottom */
+  position: relative;
   transition: opacity 1s ease-in-out;
 }
 
-/* Sovrapposizione scura per il testo */
-.overlay {
-  
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* Contenuto del testo */
+/* Text content styling below the image */
 .content {
-  position: absolute;
-  bottom: 10%;
-  left: 5%;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* White semi-transparent background */
+  padding: 20px;
+  text-align: center;
+  color: #333; /* Dark text for better readability */
 }
 
-
+.content h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
 
 .content p {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: 10px 0;
 }
 
@@ -125,7 +129,7 @@ body,
   color: white;
   padding: 10px 20px;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-radius: 5px;
 }
 
@@ -133,7 +137,7 @@ body,
   background-color: #e36917;
 }
 
-/* Pulsanti di navigazione */
+/* Navigation buttons */
 .prev,
 .next {
   position: absolute;
@@ -142,18 +146,19 @@ body,
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 15px;
-  font-size: 2rem;
+  padding: 10px;
+  font-size: 1.5rem;
   cursor: pointer;
   border-radius: 50%;
+  z-index: 1;
 }
 
 .prev {
-  left: 20px;
+  left: 10px;
 }
 
 .next {
-  right: 20px;
+  right: 10px;
 }
 
 .prev:hover,
@@ -161,29 +166,28 @@ body,
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Indicatori (punti per il controllo dello slider) */
+/* Indicators style */
 .indicators {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 10px;
   display: flex;
+  gap: 8px;
 }
 
 .indicators span {
-  height: 15px;
-  width: 15px;
-  margin: 0 5px;
-  background-color: rgba(255, 255, 255, 0.5);
+  height: 12px;
+  width: 12px;
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   cursor: pointer;
 }
 
 .indicators span.active {
-  background-color: white;
+  background-color: #333;
 }
 
 .indicators span:hover {
-  background-color: #ddd;
+  background-color: #666;
 }
 </style>
+
